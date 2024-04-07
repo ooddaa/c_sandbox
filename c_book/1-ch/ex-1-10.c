@@ -6,7 +6,7 @@
 /*
  * Write a program to replace each 
  * \t -> "\t"
- * \b -> "\b"
+ * ' ' -> "\b"
  * \\ -> "\\"
  * to make them visible to reader
  */
