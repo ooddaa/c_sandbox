@@ -11,9 +11,8 @@
 
 int main(void)
 {
-  int c, state;
+  int c, state = OUT;
 
-  state = OUT;
   while ((c = getchar()) != EOF) {
     if (c == ' ' && state == OUT) 
     {
