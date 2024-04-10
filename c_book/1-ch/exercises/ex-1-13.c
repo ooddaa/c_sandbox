@@ -43,9 +43,9 @@
 int main(void) 
 {
   int i, c, bars, wl, state, is_letter; 
-  int words[11]; // [1_letter_words, 2_letter_words...10+_letter_words]
+  int words[11];  // [1_letter_words, 2_letter_words...10+_letter_words]
 
-  wl = 0; // word length 
+  wl = 0;         // word length 
   state = OUT; 
 
   for (i = 0; i < 11; ++i) words[i] = 0;
@@ -61,7 +61,7 @@ int main(void)
       ++wl;
     } else if (state == IN && !is_letter) {
       state = OUT;
-      ++words[wl-1]; // who doesn't love offets
+      ++words[wl-1]; // who doesn't love 0-based indices 
       wl = 0;
     }
   }
@@ -77,19 +77,17 @@ int main(void)
       printf("   ");
     }
 
-    // print bars, limit 
+    // print bars 
     for (bars = 1; bars <= words[i] ; ++bars) {
       if (bars < MAX_BARS) printf("|");
       else if (bars == MAX_BARS) printf("|+");
     }
     
-    // calculate left offset to print "[total_count]"
-    // [max_bars][+][1ws]
-    // MAX_BARS + 1 + 1
-    for (int j = 0; j < (MAX_BARS + 2) - bars; ++j) {
+    // calculate padding to print "[total_count]"
+    for (int j = 0; j <= (MAX_BARS + 1 /* the possible last '+' */) - bars; ++j) {
       printf(" ");
     }
-    printf("   [%d]\n", words[i]);
+    printf("  [%d]\n", words[i]);
   } 
 
   return 0;
