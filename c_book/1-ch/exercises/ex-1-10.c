@@ -7,7 +7,7 @@
  * Write a program to replace each 
  * \t -> "\t"
  * ' ' -> "\b"
- * \\ -> "\\"
+ * \ -> "\\"
  * to make them visible to reader
  */
 
@@ -18,14 +18,13 @@ int main(void)
   while ((c = getchar()) != EOF) {
     if (c == '\t') {
       printf("\\t");
-    }
-    if (c == ' ') {
+    } else if (c == ' ') {
       printf("\\b");
-    }
-    if (c == '\\') {
+    } else if (c == '\\') {
       printf("\\");
+    } else {
+      putchar(c);
     }
-    putchar(c);
   }
   return 0;
 }
