@@ -4,7 +4,10 @@
  * Converts Celsius to Fahrenheit. 
  */
 
-float celcius_to_fahr(float cels);
+float celcius_to_fahr(float); // function prototypes 
+                              // do not need variable 
+                              // names in parameter
+                              // declarations 
 
 int main(void)
 {
@@ -17,14 +20,14 @@ int main(void)
 
   celcius = lower;
   while (celcius <= upper) {
-    printf("%3.0f %6.1f\n", celcius_to_fahr(celcius), celcius);
+    printf("%3.0f %6.1f\n", celcius_to_fahr(celcius /*actual argument (aka argument) */ ), celcius);
     celcius += step;
   }
 
   return 0;
 }
 
-float celcius_to_fahr(float cels) 
+float celcius_to_fahr(float celsius /* formal argument (aka parameter)*/) 
 {
-  return cels/(5.0/9.0) + 32.0;
+  return celsius/(5.0/9.0) + 32.0;
 }
