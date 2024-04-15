@@ -3,12 +3,13 @@
 #define BLANK_PER_TAB 4 
 
 /*
- * Replaces \t with a correct number of blanks.
+ * Replaces strings of blanks with
+ * the minumum number of tabs and 
+ * blanks to achieve the same spacing.
  *
- * TODO: refactor
  * */
 
-void detab(char[], char[], int); 
+void entab(char[], char[], int); 
 
 int getnextline(char s[], int limit)
 {
@@ -28,35 +29,30 @@ int getnextline(char s[], int limit)
    return i;
 }
 
-void detab(char from[], char to[], int len) 
+void entab(char from[], char to[], int len) 
 {
-  // go in BLANK_PER_TAB chunks
-  // if encounters \t, replace it with ' '
-  // and pad with blanks till next Tab stop
-  // Each Tab stop == 4 blanks 
-  int i, j, pos, c;
+  int i, j, pos, c, count;
 
   i = 0;
   j = 0;
-  pos = BLANK_PER_TAB;
+  count = 0; // counts consecutive blanks
   for (; i < len && j < MAX && (c = from[i]) != EOF && c != '\n' && c != '\0'; ++i) {
-      if (c == '\t') {
-      for (; pos > 0; --pos) {
-        to[j] = ' ';
-        ++j;
-      }
-      pos = BLANK_PER_TAB;
+    
+    for (pos = 0; pos < BLANK_PER_TAB; ++pos) { // see if there are 4 
+      if(from[i + pos] == ' ') ++count;         // consecutive blanks 
+    }
+
+    if (count == 4) {   // if there are
+      to[j] = '\t';     // replace those with tab
+      i += 3;           // and move original input pointer to skip the blanks 
     } else {
       to[j] = c;
-      ++j;
-      if (pos == 1) { 
-        pos = BLANK_PER_TAB;
-      } else {
-        --pos;
-      }
     }
+    ++j;
+    count = 0;
   }
 
+   
   to[j] = '\n'; 
   ++j;
   to[j] = '\0'; 
@@ -71,8 +67,8 @@ int main(void)
   while ((len = getnextline(s, MAX)) != 0) {
     printf("Original:%s\n", s);
     
-    detab(s, f, len);
-    printf("Detabbed:%s\n", f);
+    entab(s, f, len);
+    printf("Entabbed:%s\n", f);
   }
 
   return 0;
