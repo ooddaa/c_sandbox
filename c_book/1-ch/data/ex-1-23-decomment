@@ -1,0 +1,3 @@
+#include<stdio.h> // comment
+#define IN 0 // and this one
+
