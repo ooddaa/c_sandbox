@@ -5,6 +5,8 @@
 #define STATE OUT
 
 void rmcomment(char[], int);
+
+
 /*
  * Removes all comments from C code.
  */
@@ -27,30 +29,18 @@ int getnextline(char s[], int limit)
      ++i;   
   }
 
-   s[i] = '\0';
+  s[i] = '\0';
    
-   return i;
+  return i;
 }
 
 void rmcomment(char s[], int len) {
-   int i, prev_c, c, cond = 1;
-    i = -1;
-    prev_c = s[0];
-    c = s[1];
-    while (cond && i < len) {
-       if (prev_c == '/' && c == '/') { 
-         cond = 0; 
-         --i;
-       } else { 
-         ++i;
-         prev_c = c;
-         c = s[i];
-       }
-    }
-
-     s[i] = '\n';
-     ++i;   
-     s[i] = '\0';
+  int i, prev_c, c;
+  for (i = 0; i < len && ((prev_c = s[i]) != '/' && (c = s[i + 1]) != '/'); ++i);
+  
+  s[i] = '\n';
+  ++i;   
+  s[i] = '\0';
 }
 
 
@@ -61,8 +51,8 @@ int main(void)
 
   while ((len = getnextline(s, MAX)) > 0) {
     rmcomment(s, len);
-    
-    printf("[%d] %s", len, s);
+ 
+    printf("%s", s);
   }
 
   return 0;
