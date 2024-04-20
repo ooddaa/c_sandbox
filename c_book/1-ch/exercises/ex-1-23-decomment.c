@@ -6,7 +6,6 @@
 
 void rmcomment(char[], int);
 
-
 /*
  * Removes all comments from C code.
  */
@@ -38,8 +37,10 @@ void rmcomment(char s[], int len) {
   int i, prev_c, c;
   for (i = 0; i < len && ((prev_c = s[i]) != '/' && (c = s[i + 1]) != '/'); ++i);
   
-  s[i] = '\n';
-  ++i;   
+  if (i > 0) {
+    s[i] = '\n';
+    ++i;   
+  }
   s[i] = '\0';
 }
 
@@ -51,7 +52,6 @@ int main(void)
 
   while ((len = getnextline(s, MAX)) > 0) {
     rmcomment(s, len);
- 
     printf("%s", s);
   }
 
