@@ -1,27 +1,18 @@
-#include<stdio.h> // comment
-#define MAX 1000  /* comment */
+#include<stdio.h> 
+#define MAX 1000  
 #define IN 1 
 #define OUT 0
 
 int state = OUT;
 
 void rmcomment(char[], int);
-void rmmultcom(char[], int);
+void rmmultcom(char[],  int);
 
-/*
- * Removes all comments from C code.
- */
 
-/* 1 this one */
-/** 2 this one */
-/*** 3 this one */
-/*** 4 this one **/
-// 5 this one 
 int getnextline(char s[], int limit)
 {
    int i, c;
-   
-   for (i = 0; i < limit - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
+   for (i = 0; i < limit - 1  && (c = getchar()) != EOF && c != '\n'; ++i) {
      s[i] = c;
    } 
 
@@ -31,85 +22,68 @@ int getnextline(char s[], int limit)
   }
 
   s[i] = '\0';
-   
   return i;
 }
 
+int isemptyline(char[]);
+int isemptyline(char s[]) {
+  if (s[0] == '\n' && s[1] == '\0') return 1;
+  return 0;
+};
+
 void rmmultcom(char s[], int len) {
-  // printf("state %d, string: %s\n", state, s);
-  // if state is OUT we look for /* 
-  // if state is IN we look for */
-  int i, prev_c, c, 
-   pointer; // pointer where to copy chars to string
-  // for (i = 0, pointer = 0; i < len; ++i) {
-  // for (i = 0, pointer = 0; i < len && (s[i] != EOF && s[i] != '\n') && (s[i + 1] != EOF && s[i + 1] != '\n'); ++i) {
-  for (i = 0, pointer = 0; i < len && (s[i + 1] != EOF && s[i + 1] != '\n'); ++i) {
-    prev_c = s[i], c = s[i+1];
-    // printf("BEGIN i = %d, pointer = %d, s[%d] = %c, prev_c = %c, c = %c, s = %s\n", i, pointer, pointer, s[pointer], prev_c, c, s);
+  if (isemptyline(s)) return;
+  int i, curr_c, next_c, 
+   pointer, valid_c = 0; 
+  for (i = 0, pointer = 0; i < len && (s[i] != EOF && s[i] != '\n'); ++i) {
+    curr_c = s[i], next_c = s[i+1];
     if (state == OUT) {
-      // printf("state %d, prev_c %c at %d, c %c at %d, pointer at %d, i at %d\n", state, s[i], i, s[i+1], i+1, pointer, i);
-       if (prev_c == '/' && c == '*') {
+       if (curr_c == '/' && next_c == '*') {
         state = IN;
         pointer = i;
-        // printf("state => IN prev_c %c at %d, c %c at %d, pointer at %d, i at %d\n", s[i], i, s[i+1], i+1, pointer, i);
-        // printf("state => IN prev_c %c at %d, c %c at %d, pointer at %d, i at %d => %s\n", s[i], i, s[i+1], i+1, pointer, i, s);
       } else {
-        // printf("COPY s[%d] = s[%d]: %c = %c\n", pointer, i, s[pointer], s[i]);
-        // printf("state %d copy s[%d] = s[%d]: %c = %c, prev_c = %c : %s\n", state, pointer, i, s[pointer], s[i], prev_c, s);
-        if (!(prev_c == '/' && s[i-1] == '*')) {
-          s[pointer] = prev_c;
+          s[pointer] = curr_c;
           ++pointer;
-        }
+          ++valid_c;
       }
 
     } else if (state == IN) {
-      // printf("state %d, prev_c %c at %d, c %c at %d, pointer at %d, i at %d\n", state, s[i], i, s[i+1], i+1, pointer, i);
 
-      if (prev_c == '*' && c == '/') {
-      // printf("state => OUT prev_c %c at %d, c %c at %d, pointer at %d, i at %d nw? %d\n", s[i], i, s[i+1], i+1, pointer, i, s[i+2] == '\n');
+      if (curr_c == '*' && next_c == '/') {
         state = OUT;
+        ++i;
       } 
     }
   }
-  // printf("pointer = %d, i = %d, len %d, string = %s\n", pointer, i, len, s);
-  if (state == IN && pointer == 0 && (i == len-2 || i == len)) {
-   /*
-    * handles this comment 
-    *
-    */ 
-   s[0] = '\0';
-  } else if (s[i+1] == EOF || s[i+1] == '\n') {
-    // don't forget the last character 
-    if (s[i-1] == '*' && s[i] == '/') {
-      // unless it's a closing ''
-      s[pointer] = s[i+1];
-    } 
-    else if (s[i-1] == '/' && s[i] == '*') {
-    // printf("AAAA\n");
-     s[pointer] = '\0';
-    }
-    else {
-     s[pointer] = s[i];
-      ++pointer;
-     s[pointer] = '\n';
-      // s[pointer] = '\0';
-    }
+
+  if (state == IN && s[i] == '\n') {
+    s[pointer] = '\0';
   }
-  // printf("\nexit: state %d, pointer %c at %d, i %c at %d\n", state, s[pointer], pointer, s[i], i);
-  
-  // wrap up the line 
-  s[pointer + 1] = '\0';
+
+  if (state == OUT && s[i] == '\n') {
+    s[pointer] = '\n';
+  }
+
+  if (valid_c) {
+    s[pointer + 1] = '\0';
+   } else {
+    s[0] = '\0';
+   }
 }
 
+
 void rmcomment(char s[], int len) {
-  int i, prev_c, c;
-  for (i = 0; i < len && !((prev_c = s[i]) == '/' && (c = s[i + 1]) == '/'); ++i);
-  
-  if (i > 0) {
-    s[i] = '\n';
-    ++i;   
+  if (isemptyline(s)) return;
+  int i, c, valid_c = 0;
+  for (i = 0; i < len - 1 && !((c = s[i]) == '/' && s[i + 1] == '/'); ++i) {
+    if (c != ' ') ++valid_c;
   }
-  s[i] = '\0';
+  if (valid_c) {
+    s[i] = '\n';
+    s[i+1] = '\0';
+  } else {
+    s[0] = '\0';
+  }  
 }
 
 
@@ -126,5 +100,3 @@ int main(void)
 
   return 0;
 }
-
-
