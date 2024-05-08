@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<limits.h>
-
+#include<float.h>
 
 int print_all_values(void)
 {
@@ -19,12 +19,18 @@ int print_all_values(void)
   printf("Min val of short: %d\n", SHRT_MIN);
   printf("Max val of short: %d\n", SHRT_MAX);
   printf("Unsigned max val of short: %d\n\n", USHRT_MAX);
+  printf("Min val of float: %f\n", FLT_MIN);
+  printf("Max val of float: %f\n\n", FLT_MAX);
+  printf("Min val of double float: %f\n", DBL_MIN);
+  printf("Max val of double float: %f\n\n", DBL_MAX);
+  printf("Min val of long double float: %Lf\n", LDBL_MIN);
+  printf("Max val of long double float: %Lf\n\n", LDBL_MAX);
   return 0;
 }
 
 int calculate_char_max_size() 
 {
-  double counter = -1;
+  int counter = -1;
   char c = 0; 
   for (; c > -1; ++counter, ++c);
   return counter;
@@ -32,7 +38,7 @@ int calculate_char_max_size()
 
 int calculate_char_min_size() 
 {
-  double counter = 1;
+  int counter = 1;
   char c = 0; 
   for (; c <= 0; --counter, --c);
   return counter;
@@ -40,40 +46,43 @@ int calculate_char_min_size()
 
 int calculate_uchar_max_size() 
 {
-  double counter = 0;
+  int counter = 0;
   unsigned char c = 1; 
-  while (c != 0) {
-    ++counter;
-    ++c;
-   // 127
-   // -128 
-  }
+  for (; c != 0; ++counter, ++c);
+  
   return counter;
 }
+
 int calculate_int_max_size() 
 {
-  double counter = -1;
+  long counter = -1;
   int i = 0; 
   for (; i > -1; ++counter, ++i);
   return counter;
 }
+
 int calculate_int_min_size() 
 {
-  double counter = 1;
+  long counter = 1;
   int i = 0; 
   for (; i <= 0; --counter, --i);
   return counter;
 }
 
-
-int main(void)
+int calculate_and_print_all_values(void) 
 {
   printf("Min val of char: %d\n", calculate_char_min_size());
   printf("Max val of char: %d\n", calculate_char_max_size());
   printf("Max val of unsigned char: %d\n\n", calculate_uchar_max_size());
 
-  printf("Min val of int: %d\n", calculate_int_max_size());
+  printf("Min val of int: %d\n", calculate_int_min_size());
   printf("Max val of int: %d\n\n", calculate_int_max_size());
+  return 0;
+}
+
+int main(void)
+{
+  calculate_and_print_all_values();
   print_all_values();
   return 0;
 }
