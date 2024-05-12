@@ -1,0 +1,102 @@
+
+#include<stdio.h>
+#define MAX 1000  
+int STATE = 0;
+int rounds[MAX], round_i[1];
+int squigs[MAX], squig_i[1];
+int squares[MAX], square_i[1];
+
+/*
+ * Checks a C programme for matching 
+ * parenthesis: 
+ * () round 
+ * {} squiggly 
+ * [] square
+ *
+ * For example, this code 
+ * 
+ * int main (void) 
+ * {
+ *   return 0;
+ * }
+ * becomes 
+ *
+ * ['(', ')'] => []
+ * ['{', '}'] => []
+ *
+ * Which means that all brakets had pairs. 
+ */
+
+int count_brakets(int[], int, int, int, int[1]);
+int count_brakets(int symbols[], int left, int right, int c, int pointer[])
+{
+    int i; // points where to put next symbol
+           // also equals to how many unpaired 
+           // brakets there are
+
+     if (c == left) { 
+       // if (c == '(' || c == ')') printf("-1 c = %c\n", c);
+       symbols[pointer[0]] = -1;
+
+       // later will increment round_i + 2 and store line/col 
+       // printf("++pointer[0] = %d\n", pointer[0]);
+       ++pointer[0];
+     } 
+     if (c == right) {
+       if (i > 0 && symbols[pointer[0] - 1] == -1) {
+       // if (c == '(' || c == ')') printf("0  c = %c\n", c);
+         // close the pair 
+         --pointer[0];
+         symbols[pointer[0]] = 0;
+      } else {
+       // if (c == '(' || c == ')') printf("+1 c = %c\n", c);
+          symbols[pointer[0]] = 1;
+          ++pointer[0];
+       }
+     }
+  return 0;   
+}
+
+int check_parens(int);
+int check_parens(int limit)
+{
+   int i, c;
+
+   for (i = 0; i < limit && (c = getchar()) != EOF; ++i) {
+    if (c == '$') STATE = !STATE;
+    if (STATE) {
+     printf("%d %c round_i=%d squig_i=%d square_i=%d\n", i, c, round_i[0], squig_i[0], square_i[0]);
+    }
+    count_brakets(rounds, '(', ')', c, round_i);
+    count_brakets(squigs, '{', '}', c, squig_i);
+    count_brakets(squares, '[', ']', c, square_i);
+   }
+
+   c = 0;
+   for (i = 0; i <= round_i[0]; ++i) {
+     c += rounds[i];
+  }
+  // printf("squig_i %d\n", squig_i[0]); 
+   for (i = 0; i <= squig_i[0]; ++i) {
+   // printf("squigs[%d] = %d\n", i, squigs[i]);
+     c += squigs[i];
+  }
+   for (i = 0; i <= square_i[0]; ++i) {
+     c += squares[i];
+  }
+  
+  return c;
+}
+
+
+
+
+int main(void) 
+{
+  // remove comments
+  round_i[0] = 1;
+  squig_i[0] = 1;
+  square_i[0] = 1;
+  printf("%d\n", check_parens(MAX));
+  return 0;
+}
