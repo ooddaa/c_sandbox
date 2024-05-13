@@ -11,10 +11,7 @@ int getnextline(char currentline[], int maxlength) {
   for (i = 0; i < maxlength-1 && (c = getchar()) != EOF && c != '\n'; ++i) {
     currentline[i] = c;
   }
-  if (c == '\n') { 
-    currentline[i] = c;
-    ++i;
-  }
+
   currentline[i] = '\0';
   return i;
 }
