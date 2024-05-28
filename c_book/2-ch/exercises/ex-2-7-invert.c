@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 /*
- * Write function (x,p,n) that returns x with 
+ * Write function invertbits(x,p,n) that returns x with 
  * the n bits that begin at position p inverted, 
  * leaving the other bits unchanged. 
  *
