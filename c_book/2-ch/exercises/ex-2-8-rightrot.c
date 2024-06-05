@@ -14,16 +14,41 @@
  * 
  * */
 
+/* first version */
+// unsigned rightrot(unsigned, unsigned);
+// unsigned rightrot(unsigned x, unsigned n) 
+// {
+//   for (int i = 0; i < n; ++i) 
+//   {
+//     unsigned leftmost = x << (sizeof(unsigned) * 8 - 1);
+//     unsigned shifted_x = x >> 1;
+//     x = shifted_x | leftmost;
+//   }
+//   return x;
+// }
+
+
+/* second version */
 unsigned rightrot(unsigned, unsigned);
 unsigned rightrot(unsigned x, unsigned n) 
 {
-  for (int i = 0; i < n; ++i) 
+  int wordlength(void);
+  while (n-- > 0)
   {
-    unsigned leftmost = x << (sizeof(unsigned) * 8 - 1);
-    unsigned shifted_x = x >> 1;
-    x = shifted_x | leftmost;
+    unsigned leftmost = x << (wordlength() - 1);
+    x = x >> 1; // shift x one position right
+    x |= leftmost; // put ex-rightmost bit into leftmost place
   }
   return x;
+}
+
+int wordlength(void);
+int wordlength()
+{
+  int i, x;
+  x = ~0;
+  for (i = 0; (x >>= 1) > 0; ++i);
+  return i;
 }
 
 int main(void)
