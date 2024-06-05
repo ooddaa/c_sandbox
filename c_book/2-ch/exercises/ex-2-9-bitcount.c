@@ -14,13 +14,15 @@ unsigned bitcount(unsigned);
 unsigned bitcount(unsigned x)
 {
    int b;
-   for (int b = 1; x != 0;) if(x &= (x-1)) ++b;
+   for (b = 0; x != 0; x &= x-1) ++b;
+   // for (b = 1; x != 0;) if(x &= (x-1)) ++b; <- this will crash a plane 💥
   return b;
 }
 
 
 int main(void)
 {
+  printf("%u\n", bitcount(0)); // 0
   printf("%u\n", bitcount(0b1)); // 1
   printf("%u\n", bitcount(0b11)); // 2
   printf("%u\n", bitcount(0b1011)); // 3

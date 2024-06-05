@@ -1,5 +1,9 @@
 #include<stdio.h>
 
+/**
+ * Better version.
+ *
+ * */
 int binsearch(int, int[], int); 
 int binsearch(int x, int v[], int len) 
 {
