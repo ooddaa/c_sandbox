@@ -25,6 +25,6 @@ int main(void)
   int v[10] = {1,2,3,4,5,6,7,8,9,10};
   printf("%d\n", binsearch(5, v, 10)); // 4
   printf("%d\n", binsearch(57, v, 10)); // -1
-  printf("%d\n", binsearch(7, v, 115)); // 6 <- hmm correct
+  // printf("%d\n", binsearch(7, v, 115)); // 6 <- hmm correct on Intel, not correct on M1
   return 0;
 }
